@@ -43,8 +43,12 @@ jobs:
           ssh $SERVER_USER@$SERVER_HOST << 'EOF'
             cd ~/lookuply/infrastructure
             git pull origin main
+            # Remove old image to avoid conflicts
+            docker rmi lookuply-chat-frontend:latest 2>/dev/null || true
+            # Load new image
             docker load < /tmp/chat-frontend.tar.gz
-            docker compose up -d chat-frontend
+            # Force recreate container to use new image
+            docker compose up -d --force-recreate chat-frontend
             rm /tmp/chat-frontend.tar.gz
           EOF
 
