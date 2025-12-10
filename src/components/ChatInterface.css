@@ -16,6 +16,7 @@
   padding: 0.75rem 1.5rem;
   border-bottom: 1px solid #e5e5e5;
   position: relative;
+  height: 3rem;
 }
 
 .chat-header h1 {
@@ -24,22 +25,29 @@
   font-weight: 600;
   color: #202123;
   cursor: default;
+  transition: opacity 0.2s ease;
+  position: absolute;
+  left: 1.5rem;
 }
 
-/* Subtitle appears on hover */
+/* Subtitle swaps in on hover */
 .chat-header-subtitle {
   margin: 0;
   font-size: 0.875rem;
   color: #6e6e80;
   opacity: 0;
-  position: absolute;
-  left: 5.5rem;
   transition: opacity 0.2s ease;
+  position: absolute;
+  left: 1.5rem;
   pointer-events: none;
 }
 
-.chat-header h1:hover + .chat-header-subtitle,
-.chat-header-subtitle:hover {
+/* On hover: hide h1, show subtitle */
+.chat-header:hover h1 {
+  opacity: 0;
+}
+
+.chat-header:hover .chat-header-subtitle {
   opacity: 1;
 }
 
@@ -229,23 +237,28 @@
 }
 
 .chat-submit {
-  padding: 0.875rem 1.5rem;
-  font-size: 1rem;
-  background: #10a37f;
-  color: white;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  font-size: 1.5rem;
+  background: #000;
+  color: #fff;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 50%;
   cursor: pointer;
   font-weight: 500;
   transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .chat-submit:hover:not(:disabled) {
-  background: #0d8f6f;
+  background: #333;
 }
 
 .chat-submit:disabled {
-  background: #d0d0d0;
+  background: #666;
   cursor: not-allowed;
 }
 
@@ -275,15 +288,11 @@
   cursor: pointer;
   transition: all 0.2s ease;
   z-index: 10;
+  font-size: 1.5rem;
+  color: #6e6e80;
 }
 
 .scroll-to-bottom:hover {
   background: #f9f9f9;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
-}
-
-.scroll-to-bottom svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #6e6e80;
 }
