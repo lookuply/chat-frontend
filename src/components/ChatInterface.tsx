@@ -85,7 +85,23 @@ export function ChatInterface() {
         )
       );
 
-      // 5. Fetch AI summary (SLOW - 2-3s)
+      // 5. Check if we have sources - if not, show "no results" message
+      if (searchResponse.sources.length === 0) {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === assistantMessageId
+              ? {
+                  ...msg,
+                  content: "I couldn't find any results for your query. Our search index is still being populated. Please try again later or try a different query.",
+                  isLoadingAnswer: false,
+                }
+              : msg
+          )
+        );
+        return;
+      }
+
+      // 6. Fetch AI summary (SLOW - 2-3s)
       const summaryResponse = await searchApi.summarize({
         query: userQuery,
         language: 'en',
@@ -93,7 +109,7 @@ export function ChatInterface() {
         source_ids: searchResponse.sources.map((s) => s.id),
       });
 
-      // 6. Update message with answer (replace placeholder)
+      // 7. Update message with answer (replace placeholder)
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === assistantMessageId
