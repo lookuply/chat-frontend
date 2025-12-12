@@ -348,6 +348,13 @@
 }
 
 .scroll-to-bottom:hover {
-  background: #f9f9f9;
+  background: #000;
+  color: #fff;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+}
+
+.scroll-to-bottom:active {
+  background: #000;
+  color: #fff;
+  transform: scale(0.95);
 }
