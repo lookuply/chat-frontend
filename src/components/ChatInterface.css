@@ -356,7 +356,6 @@
 
 .scroll-to-bottom:active {
   background: #fff;
-  border: 3px solid #0066cc;
+  border: 3px solid #000;
   color: #000;
-  transform: translateX(4px);
 }
