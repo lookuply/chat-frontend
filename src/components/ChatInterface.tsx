@@ -20,10 +20,26 @@ export function ChatInterface() {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const lastUserMessageRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom function
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Scroll to last user message (top of conversation)
+  const scrollToLastUserMessage = () => {
+    lastUserMessageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  // Check if content exceeds viewport and update scroll button visibility
+  const checkScrollButtonVisibility = () => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = container;
+    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+    setShowScrollButton(distanceFromBottom > 200);
   };
 
   // Monitor scroll position to show/hide scroll button
@@ -31,15 +47,15 @@ export function ChatInterface() {
     const container = messagesContainerRef.current;
     if (!container) return;
 
-    const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } = container;
-      const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-      setShowScrollButton(distanceFromBottom > 200);
-    };
-
-    container.addEventListener('scroll', handleScroll);
-    return () => container.removeEventListener('scroll', handleScroll);
+    container.addEventListener('scroll', checkScrollButtonVisibility);
+    return () => container.removeEventListener('scroll', checkScrollButtonVisibility);
   }, []);
+
+  // Check scroll button visibility when messages change
+  useEffect(() => {
+    // Wait for DOM to update, then check
+    setTimeout(checkScrollButtonVisibility, 100);
+  }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,6 +83,9 @@ export function ChatInterface() {
       isLoadingAnswer: true,
     };
     setMessages((prev) => [...prev, assistantMessage]);
+
+    // 3. Scroll to the new user message (top of conversation)
+    setTimeout(scrollToLastUserMessage, 50);
 
     try {
       // 3. Fetch sources (FAST - <100ms)
@@ -155,13 +174,21 @@ export function ChatInterface() {
           </div>
         )}
 
-        {messages.map((msg) => (
-          <div key={msg.id} className="message-group">
-            {msg.role === 'user' ? (
-              <div className="user-message">
-                <strong>You:</strong> {msg.content}
-              </div>
-            ) : (
+        {messages.map((msg, index) => {
+          // Check if this is the last user message
+          const isLastUserMessage = msg.role === 'user' &&
+            !messages.slice(index + 1).some(m => m.role === 'user');
+
+          return (
+            <div key={msg.id} className="message-group">
+              {msg.role === 'user' ? (
+                <div
+                  className="user-message"
+                  ref={isLastUserMessage ? lastUserMessageRef : null}
+                >
+                  <strong>You:</strong> {msg.content}
+                </div>
+              ) : (
               <div className="assistant-message-container">
                 {/* Sources - displayed immediately */}
                 {msg.sources && msg.sources.length > 0 && (
@@ -208,7 +235,8 @@ export function ChatInterface() {
               </div>
             )}
           </div>
-        ))}
+        );
+        })}
         <div ref={messagesEndRef} />
       </div>
 

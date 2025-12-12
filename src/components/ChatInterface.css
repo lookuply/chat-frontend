@@ -283,8 +283,13 @@
   bottom: 6rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 3rem;
+  height: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
+  max-width: 3rem;
+  max-height: 3rem;
+  padding: 0;
   border-radius: 50%;
   background: #fff;
   border: 1px solid #d0d0d0;
@@ -296,6 +301,7 @@
   transition: all 0.2s ease;
   z-index: 10;
   font-size: 1.5rem;
+  line-height: 1;
   color: #6e6e80;
 }
 
