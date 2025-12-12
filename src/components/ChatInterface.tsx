@@ -169,8 +169,8 @@ export function ChatInterface() {
       <div className="chat-messages" ref={messagesContainerRef}>
         {messages.length === 0 && (
           <div className="welcome-message">
-            <h2>Ask me anything</h2>
-            <p>Get instant answers from the web with AI-powered search</p>
+            <h2>Search anything</h2>
+            <p>Privacy-first AI search</p>
           </div>
         )}
 
@@ -252,21 +252,23 @@ export function ChatInterface() {
       )}
 
       <form className="chat-input-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Ask a question..."
-          disabled={loading}
-          className="chat-input"
-        />
-        <button
-          type="submit"
-          disabled={loading || !query.trim()}
-          className="chat-submit"
-        >
-          {loading ? '...' : '↓'}
-        </button>
+        <div className="search-bar-container">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search anything..."
+            disabled={loading}
+            className="chat-input"
+          />
+          <button
+            type="submit"
+            disabled={loading || !query.trim()}
+            className="chat-submit"
+          >
+            {loading ? '...' : '↑'}
+          </button>
+        </div>
       </form>
 
       <footer className="chat-footer">
