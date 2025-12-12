@@ -345,6 +345,7 @@
   font-size: 1.5rem;
   line-height: 1;
   color: #000;
+  outline: none;
 }
 
 .scroll-to-bottom:hover {
@@ -354,8 +355,14 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
 }
 
+.scroll-to-bottom:focus {
+  outline: none;
+  border: 2px solid #000;
+}
+
 .scroll-to-bottom:active {
   background: #fff;
   border: 3px solid #000;
   color: #000;
+  outline: none;
 }
