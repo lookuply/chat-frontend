@@ -21,6 +21,7 @@ export function ChatInterface() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const lastUserMessageRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Scroll to bottom function
   const scrollToBottom = () => {
@@ -156,6 +157,8 @@ export function ChatInterface() {
       );
     } finally {
       setLoading(false);
+      // Refocus on input after search
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   };
 
@@ -254,6 +257,7 @@ export function ChatInterface() {
       <form className="chat-input-form" onSubmit={handleSubmit}>
         <div className="search-bar-container">
           <input
+            ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
