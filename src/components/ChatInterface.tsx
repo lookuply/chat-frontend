@@ -101,21 +101,22 @@ export function ChatInterface() {
         return;
       }
 
-      // 6. Fetch AI summary (SLOW - 2-3s)
-      const summaryResponse = await searchApi.summarize({
-        query: userQuery,
-        language: 'en',
-        query_id: searchResponse.query_id,
-        source_ids: searchResponse.sources.map((s) => s.id),
-      });
+      // 6. Skip AI summary - temporarily disabled due to LLM timeouts
+      // TODO: Re-enable when Ollama performance is fixed
+      // const summaryResponse = await searchApi.summarize({
+      //   query: userQuery,
+      //   language: 'en',
+      //   query_id: searchResponse.query_id,
+      //   source_ids: searchResponse.sources.map((s) => s.id),
+      // });
 
-      // 7. Update message with answer (replace placeholder)
+      // 7. Update message - no AI answer, sources only
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === assistantMessageId
             ? {
                 ...msg,
-                content: summaryResponse.answer,
+                content: '', // No AI answer - sources only
                 isLoadingAnswer: false,
               }
             : msg
